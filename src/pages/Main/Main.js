@@ -1,8 +1,12 @@
 import React from 'react'
+import { Navbar,Education } from '../../components'
 
 function Main() {
   return (
-    <div>Main</div>
+    <div>
+      <Navbar/>
+      <Education/> 
+    </div>
   )
 }
 

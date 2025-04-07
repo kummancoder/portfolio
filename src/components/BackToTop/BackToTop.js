@@ -1,52 +1,33 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { IoIosArrowDropupCircle } from 'react-icons/io';
-import { makeStyles } from '@material-ui/core/styles';
-
 import { ThemeContext } from '../../contexts/ThemeContext';
 import './BackToTop.css';
 
 function BackToTop() {
-    const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const { theme } = useContext(ThemeContext);
 
-    const { theme } = useContext(ThemeContext);
-
+  useEffect(() => {
     const toggleVisible = () => {
-        const scrolled = document.documentElement.scrollTop;
-        if (scrolled > 300) {
-            setVisible(true);
-        } else if (scrolled <= 300) {
-            setVisible(false);
-        }
-    };
-
-    const scrollToTop = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth',
-        });
+      const scrolled = document.documentElement.scrollTop;
+      setVisible(scrolled > 300);
     };
 
     window.addEventListener('scroll', toggleVisible);
+    return () => window.removeEventListener('scroll', toggleVisible);
+  }, []);
 
-    const useStyles = makeStyles(() => ({
-        icon: {
-            fontSize: '3rem',
-            color: theme.tertiary,
-        },
-    }));
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
-    const classes = useStyles();
-
-    return (
-        <div
-            style={{ display: visible ? 'inline' : 'none' }}
-            className='backToTop'
-        >
-            <button onClick={scrollToTop} aria-label='Back to top'>
-                <IoIosArrowDropupCircle className={classes.icon} />
-            </button>
-        </div>
-    );
+  return (
+    <div style={{ display: visible ? 'inline' : 'none' }} className="backToTop">
+      <button onClick={scrollToTop} aria-label="Back to top">
+        <IoIosArrowDropupCircle style={{ fontSize: '3rem', color: theme.tertiary }} />
+      </button>
+    </div>
+  );
 }
 
 export default BackToTop;
